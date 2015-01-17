@@ -50,7 +50,7 @@
         profHTML = "<p><a href=\"" + profile.publicProfileUrl + "\">";
         profHTML = profHTML + "<img align=\"baseline\" src=\"" + pictureUrl + "\"></a>";      
         profHTML = profHTML + "&nbsp; Welcome <a href=\"" + profile.publicProfileUrl + "\">";
-        profHTML = profHTML + profile.firstName + " " + profile.lastName + " " + profile.industry + "</a>! <a href=\"#\" onclick=\"IN.User.logout(); return false;\">logout</a></p>";
+        profHTML = profHTML + profile.firstName + " " + profile.lastName + " " + profile.industry + " " + profile.id + "</a>! <a href=\"#\" onclick=\"IN.User.logout(); return false;\">logout</a></p>";
       }
       document.getElementById("loginbadge").innerHTML = profHTML;
       console.log("setLoginBadge called");
