@@ -88,7 +88,8 @@
         type: "POST",
         data: {lat: lat, lng: lng, firstName: firstName, lastName: lastName, linkedinId: linkedinId, industry: industry},
         success:function(response){
-          alert("submitted successfully")
+          //alert("submitted successfully")
+          window.location.replace("/list");
         },
         complete:function(){},
         error:function (xhr, textStatus, thrownError){}
