@@ -16,10 +16,15 @@
   </script>
    <script type="text/javascript" src="http://code.jquery.com/jquery-1.5b1.js"></script>
   <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.7/jquery-ui.min.js"></script>  
+  <script src="http://maps.google.com/maps/api/js?sensor=false"></script>
 </head>
+
+
 <body>
   <h1>Welcome to Idea Meet</h1>
   <script type="text/javascript">
+    //var location;
+    var lat, lng, firstName, lastName, linkedinId, industry;
     function onLinkedInLoad() {
       IN.Event.on(IN, "auth", function() {onLinkedInLogin();});
       IN.Event.on(IN, "logout", function() {onLinkedInLogout();});
@@ -46,22 +51,77 @@
         profHTML = "<p>You are not logged in</p>";
       }
       else {
+        linkedinId = profile.id;
+        industry = profile.industry;
+        firstName = profile.firstName;
+        lastName = profile.lastName;
+
         var pictureUrl = profile.pictureUrl || "http://static02.linkedin.com/scds/common/u/img/icon/icon_no_photo_80x80.png";
         profHTML = "<p><a href=\"" + profile.publicProfileUrl + "\">";
         profHTML = profHTML + "<img align=\"baseline\" src=\"" + pictureUrl + "\"></a>";      
         profHTML = profHTML + "&nbsp; Welcome <a href=\"" + profile.publicProfileUrl + "\">";
-        profHTML = profHTML + profile.firstName + " " + profile.lastName + " " + profile.industry + " " + profile.id + "</a>! <a href=\"#\" onclick=\"IN.User.logout(); return false;\">logout</a></p>";
+        profHTML = profHTML + profile.firstName + " " + profile.lastName + "</a>! <a href=\"#\" onclick=\"IN.User.logout(); return false;\">logout</a></p>";
+        initialize();
       }
       document.getElementById("loginbadge").innerHTML = profHTML;
       console.log("setLoginBadge called");
     }
+
+    function initialize() {
+      var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 5,
+          center: new google.maps.LatLng(41.879535, -87.624333),
+          mapTypeId: google.maps.MapTypeId.ROADMAP
+      });
+      google.maps.event.addListener(map, 'click', function(event) {
+            lat = event.latLng.lat();
+            lng = event.latLng.lng();
+            $('#input_lat').val(lat);
+            $('#input_lng').val(lng);
+            //alert("Lat = " + lat + ", Lng" + lng);
+        });
+    }
+
+    function submitInfo(){
+      $.ajax({
+        url:'/',
+        type: "POST",
+        data: {lat: lat, lng: lng, firstName: firstName, lastName: lastName, linkedinId: linkedinId, industry: industry},
+        success:function(response){
+          alert("submitted successfully")
+        },
+        complete:function(){},
+        error:function (xhr, textStatus, thrownError){}
+      });
+    }
+    /*function placeMarker() {
+      if(mapZoom == map.getZoom()){
+          var marker = new google.maps.Marker({
+              position: location,
+              map: map
+          });
+      }
+    }*/
 </script>
 
 <!-- need to be logged in to use; if not, offer a login button -->
 <script type="IN/Login"></script>
 
+
+
 <div id="loginbadge">
   <p>Login badge renders here if the current user is authorized.</p>
+</div>
+
+
+
+<div id="map" style="width: 500px; height: 300px">  
+</div>
+
+<div>
+  <input type="text" id="input_lat">
+  <input type="text" id="input_lng">
+  <button type="submit" id="submit_info" onclick="submitInfo()"> submit </button>
 </div>
 </body>
 </html>
