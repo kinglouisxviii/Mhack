@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Idea Meet</title>
+  <script type="text/javascript" src="https://platform.linkedin.com/in.js">
+    api_key: 75vi3y3214zj9u
+    authorize:true
+    onLoad: onLinkedInLoad
+  </script>
+  <script>
+    function onLinkedInAuth(){
+      console.log("success");
+    }
+  </script>
+   <script type="text/javascript" src="http://code.jquery.com/jquery-1.5b1.js"></script>
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.7/jquery-ui.min.js"></script>  
+</head>
+<body>
+  <h1>Welcome to Idea Meet</h1>
+  <script type="text/javascript">
+    function onLinkedInLoad() {
+      IN.Event.on(IN, "auth", function() {onLinkedInLogin();});
+      IN.Event.on(IN, "logout", function() {onLinkedInLogout();});
+    }
+
+    function onLinkedInLogout() {
+      setLoginBadge(false);
+    }
+
+    function onLinkedInLogin() {
+      // we pass field selectors as a single parameter (array of strings)
+      IN.API.Profile("me")
+        .fields(["id", "firstName", "lastName", "pictureUrl", "publicProfileUrl", "industry"])
+        .result(function(result) {
+          setLoginBadge(result.values[0]);
+        })
+        .error(function(err) {
+          alert(err);
+        });
+    }
+
+    function setLoginBadge(profile) {
+      if (!profile) {
+        profHTML = "<p>You are not logged in</p>";
+      }
+      else {
+        var pictureUrl = profile.pictureUrl || "http://static02.linkedin.com/scds/common/u/img/icon/icon_no_photo_80x80.png";
+        profHTML = "<p><a href=\"" + profile.publicProfileUrl + "\">";
+        profHTML = profHTML + "<img align=\"baseline\" src=\"" + pictureUrl + "\"></a>";      
+        profHTML = profHTML + "&nbsp; Welcome <a href=\"" + profile.publicProfileUrl + "\">";
+        profHTML = profHTML + profile.firstName + " " + profile.lastName + " " + profile.industry + "</a>! <a href=\"#\" onclick=\"IN.User.logout(); return false;\">logout</a></p>";
+      }
+      document.getElementById("loginbadge").innerHTML = profHTML;
+      console.log("setLoginBadge called");
+    }
+</script>
+
+<!-- need to be logged in to use; if not, offer a login button -->
+<script type="IN/Login"></script>
+
+<div id="loginbadge">
+  <p>Login badge renders here if the current user is authorized.</p>
+</div>
+</body>
+</html>
