@@ -36,6 +36,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.gis',
     'index',
     'register',
     'signin',
@@ -62,8 +63,19 @@ WSGI_APPLICATION = 'ideaMeet.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        #'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        #'NAME': os.path.join(BASE_DIR, 'db.sqlite3'
+        #'NAME': 'postgres',
+        #'USER': 'postgres',
+        #'PASSWORD': '541027',
+        #'HOST': 'localhost',
+        #'PORT': 5432
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',
+        'NAME': 'ideaMeet',
+        'USER': 'postgres',
+        'PASSWORD': '541027',
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
 
