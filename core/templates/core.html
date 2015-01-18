@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -88,7 +87,8 @@
         type: "POST",
         data: {lat: lat, lng: lng, firstName: firstName, lastName: lastName, linkedinId: linkedinId, industry: industry},
         success:function(response){
-          alert("submitted successfully")
+          //alert("submitted successfully")
+          window.location.replace("/list")
         },
         complete:function(){},
         error:function (xhr, textStatus, thrownError){}
@@ -122,6 +122,10 @@
   <input type="text" id="input_lat">
   <input type="text" id="input_lng">
   <button type="submit" id="submit_info" onclick="submitInfo()"> submit </button>
+</div>
+
+<div id="content">
+  
 </div>
 </body>
 </html>
