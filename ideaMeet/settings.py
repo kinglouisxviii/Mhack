@@ -73,7 +73,7 @@ DATABASES = {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
         'NAME': 'ideaMeet',
         'USER': 'postgres',
-        'PASSWORD': '541027',
+        'PASSWORD': 'zyf19930320',
         'HOST': 'localhost',
         'PORT': '5432',
     }

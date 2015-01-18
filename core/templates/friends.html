@@ -11,8 +11,11 @@
 <body>
   <h1>Welcome to Core</h1>
   <div id="list">
+    {% for invite in invites %}
+      invite {{invite.personName}} {{invite.subject}}
+    {% endfor %}
     {% for friend in friends %}
-      {{friend.firstName}} {{friend.distance}}
+      {{friend.linkedinId}} {{friend.firstName}}
     {% endfor %}
   </div>
 </body>
