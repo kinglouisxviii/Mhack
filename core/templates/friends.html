@@ -1,23 +1,36 @@
-<!DOCTYPE html>
-<html lang="en">
 
-<head>
-  <meta charset="utf-8">
-  <title>Idea Meet</title>
-  <script type="text/javascript" src="https://platform.linkedin.com/in.js">
-    api_key: 75vi3y3214zj9u
-  </script>
-  
-</head>
-<body>
+{% extends "base.html" %}
+
+{% block content %}
+
   <h1>Welcome to Core</h1>
   <div id="list">
-    {% for invite in invites %}
-      invite {{invite.personName}} {{invite.subject}}
-    {% endfor %}
-    {% for friend in friends %}
-      {{friend.linkedinId}} {{friend.firstName}}
-    {% endfor %}
+    
+
+    <div class="table-responsive">
+    <table class="table table-bordered table-striped">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Background</th>
+          <th>Place to meet</th>
+          <th>When to meet</th>
+          <th>Subject</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for friend in friends %}
+        <tr>
+          <td scope="row">{{friend.firstName}} {{friend.lastName}}</td>
+          <td class="text-success"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span> {{friend.industry}}</td>
+          <td class="text-success"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span> {{invite.place}}</td>
+          <td class="text-muted" rowspan="3" style="vertical-align: middle;">{{invite.time}}</td>
+          <td class="text-danger"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span> {{invite.subject}}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
   </div>
 
 <div id="pop" style="display:none">
@@ -45,6 +58,49 @@
       $('#pop').show();
     })
   })
+    //var location;
+  var lat, lng, firstName, lastName, linkedinId, industry;
+  function onLinkedInLoad() {
+    IN.Event.on(IN, "auth", function() {onLinkedInLogin();});
+    IN.Event.on(IN, "logout", function() {onLinkedInLogout();});
+    console.log("here!");
+  }
+
+  function onLinkedInLogout() {
+    setLoginBadge(false);
+  }
+
+  function onLinkedInLogin() {
+    // we pass field selectors as a single parameter (array of strings)
+    IN.API.Profile("me")
+      .fields(["id", "firstName", "lastName", "pictureUrl", "publicProfileUrl", "industry"])
+      .result(function(result) {
+        setLoginBadge(result.values[0]);
+      })
+      .error(function(err) {
+        alert(err);
+      });
+  }
+
+  function setLoginBadge(profile) {
+    if (!profile) {
+      profHTML = "<p>You are not logged in</p>";
+    }
+    else {
+      linkedinId = profile.id;
+      industry = profile.industry;
+      firstName = profile.firstName;
+      lastName = profile.lastName;
+
+      var pictureUrl = profile.pictureUrl || "http://static02.linkedin.com/scds/common/u/img/icon/icon_no_photo_80x80.png";
+      profHTML = "<p><a href=\"" + profile.publicProfileUrl + "\">";
+      profHTML = profHTML + "<img align=\"baseline\" src=\"" + pictureUrl + "\"></a>";      
+      profHTML = profHTML + "&nbsp; Welcome <a href=\"" + profile.publicProfileUrl + "\">";
+      profHTML = profHTML + profile.firstName + " " + profile.lastName + "</a>! <a href=\"#\" onclick=\"IN.User.logout(); return false;\">logout</a></p>";
+      //initialize();
+    }
+    document.getElementById("loginbadge").innerHTML = profHTML;
+    console.log("setLoginBadge called");
+  }
 </script>
-</body>
-</html>
+{% endblock %}

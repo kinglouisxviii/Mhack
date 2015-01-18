@@ -30,5 +30,6 @@ def listPeople(request):
       else:
         invites.append(invite)
         print 1
-    return render(request,'friends.html', {'invites' : invites, 'friends' : friends}) 
+    #combo = zip(friends, invites)
+    return render(request,'friends.html', {'friends' : friends}) 
   return render(request, 'friends.html')
